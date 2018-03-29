@@ -86,7 +86,7 @@ var figue = (function() {
 
   function generateDendogram(tree, sep, balanced, withLabel, withCentroid, withDistance) {
     var lines = new Array();
-    var centroidstr = prettyVector(tree.centroid);
+    var centroidstr = prettyValue(tree.id);
     if (tree.isLeaf()) {
       var labelstr = String(tree.label);
       var len = 1;
@@ -189,7 +189,7 @@ var figue = (function() {
     // create leaves of the tree
     for (i = 0; i < N; i++) {
       clusters[i] = [];
-      clusters[i][0] = new Node(labels[i], null, null, 0, vectors[i]);
+      clusters[i][0] = new Node(labels[i], null, null, 0, vectors[i], i);
       cSize[i] = 1;
     }
 
@@ -207,7 +207,7 @@ var figue = (function() {
       c2Cluster = clusters[c2][0];
 
       newCentroid = calculateCentroid(c1Cluster.size, c1Cluster.centroid, c2Cluster.size, c2Cluster.centroid);
-      var newCluster = new Node(-1, c1Cluster, c2Cluster, distMatrix[c1][c2], newCentroid);
+      var newCluster = new Node(-1, c1Cluster, c2Cluster, distMatrix[c1][c2], newCentroid, 10 * (N - p - 1));
       clusters[c1].splice(0, 0, newCluster);
       cSize[c1] += cSize[c2];
 
@@ -416,12 +416,14 @@ var figue = (function() {
     }
   }
 
-  function Node(label, left, right, dist, centroid) {
+  function Node(label, left, right, dist, centroid, id) {
     this.label = label;
     this.left = left;
     this.right = right;
     this.dist = dist;
     this.centroid = centroid;
+    this.id = id;
+
     if (left == null && right == null) {
       this.size = 1;
       this.depth = 0;
@@ -439,7 +441,7 @@ var figue = (function() {
     MANHATTAN_DISTANCE: 1,
     MAX_DISTANCE: 2,
     PRINT_VECTOR_VALUE_PRECISION: 2,
-    KMEANS_MAX_ITERATIONS: 10,
+    KMEANS_MAX_ITERATIONS: 1000,
     FCMEANS_MAX_ITERATIONS: 3,
 
     Matrix: Matrix,
@@ -447,7 +449,8 @@ var figue = (function() {
     generateDendogram: generateDendogram,
     agglomerate: agglomerate,
     kmeans: kmeans,
-    fcmeans: fcmeans
+    fcmeans: fcmeans,
+    euclidianDistance: euclidianDistance
   };
 })();
 
