@@ -1,0 +1,9 @@
+{
+  "name": "figue",
+  "version": "1.0.1",
+  "description": "A Collection of Clustering Algorithms Implemented in Javascript",
+  "main": "figue.js",
+  "repository": "git@github.com:nantunes/figue.git",
+  "author": "Jean-Yves Delort <jydelort@gmail.com>",
+  "license": "MIT"
+}
